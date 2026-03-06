@@ -26,7 +26,7 @@ export default function CatPage() {
       setCurrentFact(data);
       
       loadHistory();
-    } catch (err) {
+    } catch {
       setError('No se pudo obtener la curiosidad. Intenta de nuevo más tarde.');
     } finally {
       setIsLoading(false);
@@ -35,14 +35,21 @@ export default function CatPage() {
 
   // Llamada al Backend para obtener el historial de curiosidades
   const loadHistory = async () => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/history`);
-      const data: HistoryItem[] = await response.json();
-      setHistory(data);
-    } catch (err) {
-      console.error('Error al cargar el historial');
+  try {
+    const response = await fetch(`${BACKEND_URL}/history`);
+    if (!response.ok) {
+      console.error('El backend ha devuelto un error');
+      return; 
     }
-  };
+    
+    const data: HistoryItem[] = await response.json();
+    if (Array.isArray(data)) {
+      setHistory(data);
+    }
+  } catch (err) {
+    console.error('Error al cargar el historial:', err);
+  }
+};
 
   useEffect(() => {
     loadHistory();
