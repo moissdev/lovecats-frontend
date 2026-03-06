@@ -49,7 +49,7 @@ export default function CatPage() {
   } catch (err) {
     console.error('Error al cargar el historial:', err);
   }
-};
+  };
 
   useEffect(() => {
     loadHistory();
