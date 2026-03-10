@@ -19,7 +19,7 @@ export default function CatPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const BACKEND_URL = 'http://localhost:3001/api'; // Puerto del backend
+  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL; // Puerto del backend
 
   // Llamada al Backend para obtener una curiosidad
   const fetchNewFact = async () => {
