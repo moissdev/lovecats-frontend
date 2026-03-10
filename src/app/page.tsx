@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { CatFact, HistoryItem } from '@/types';
+import Image from 'next/image'
+import gatoIzq from '../../public/gato-izq.jpeg'
+import gatoIzq2 from '../../public/gato-izq2.jpeg'
+import gatoIzq3 from '../../public/gato-izq3.jpeg'
+import gatoDer from '../../public/gato-der.jpeg'
+import gatoDer2 from '../../public/gato-der2.jpeg'
+import gatoDer3 from '../../public/gato-der3.jpeg'
 
 export default function CatPage() {
   // Estados de las curiosidades (Actual y del historial)
@@ -27,7 +34,7 @@ export default function CatPage() {
       
       loadHistory();
     } catch {
-      setError('No se pudo obtener la curiosidad. Intenta de nuevo más tarde.');
+      setError('El Gato Mayor está durmiendo... Intenta de nuevo más tarde.');
     } finally {
       setIsLoading(false);
     }
@@ -56,42 +63,69 @@ export default function CatPage() {
   }, []);
 
   return (
-    <main className="container">
-      <h1>Curiosidades curiosas de los michis :3</h1>
+    <div className="app-wrapper">
+      {/* Imágen izquierda */}
+      <aside className="side-cat hidden md:flex">
+        <span className='cat-photo'>
+          <Image src={gatoIzq} alt="Michi mago" />
+          <Image src={gatoIzq2} alt="Michi arábico" />
+          <Image src={gatoIzq3} alt="Michi fino" />
+        </span>
+      </aside>
 
-      {/* SECCIÓN: SUCCESS / LOADING / ERROR */}
-      <section className="main-display">
-        {isLoading ? (
-          <div className="w-full h-24 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">Cargando la michicuriosidad...</div>
-        ) : error ? (
-          <div className="error-message">{error}</div>
-        ) : currentFact ? (
-          <div className="fact-card">
-            <p>{currentFact.fact}</p>
-          </div>
-        ) : (
-          <p>Nueva michicuriosidad</p>
-        )}
+      {/* Contenido central */}
+      <main className="main-content">
+        <h1 className="text-5xl font-bold mb-6">Lovecats</h1>
 
-        <button onClick={fetchNewFact} disabled={isLoading}>
-          {isLoading ? 'Buscando...' : 'Obtener nueva curiosidad'}
-        </button>
-      </section>
+        <h2 className="text-2xl font-bold mb-6">De gatos para amantes de los gatos</h2>
 
-      <hr />
+        <section className="fact-display">
+          {isLoading ? (
+            <div className="skeleton"></div>
+          ) : error ? (
+            <div className="fact-card border-red-200 text-red-500">{error}</div>
+          ) : currentFact ? (
+            <div className="fact-card italic">
+              &quot;{currentFact.fact}&quot;
+            </div>
+          ) : (
+            <div className="fact-card text-gray-400">
+              Presiona el botón para recibir sabiduría del Gato Mayor...
+            </div>
+          )}
 
-      {/* SECCIÓN: HISTORIAL */}
-      <section className="history-section">
-        <h2>Historial de michicuriosidades</h2>
-        <ul>
-          {history.map((item) => (
-            <li key={item.id}>
-              <small>{new Date(item.created_at).toLocaleDateString()}:</small>
-              <p>{item.fact_text}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+          <button 
+            className="cat-button"
+            onClick={fetchNewFact} 
+            disabled={isLoading}
+          >
+            {isLoading ? 'Jugando con estambre...' : '¡Nueva curiosidad!'}
+          </button>
+        </section>
+
+        <section className="history-section">
+          <h2 className="text-xl font-semibold mb-4">Curiosidades pasadas...</h2>
+          <ul>
+            {history.map((item) => (
+              <li key={item.id} className="history-item shadow-sm">
+                <small className="text-pink-400 block mb-1">
+                  {new Date(item.created_at).toLocaleDateString()}
+                </small>
+                {item.fact_text}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
+
+      {/* Imágen derecha */}
+      <aside className="side-cat hidden md:flex">
+        <span>
+          <Image src={gatoDer} alt="Michi fiestero" />
+          <Image src={gatoDer2} alt="Michi fino" />
+          <Image src={gatoDer3} alt="Michi fino" />
+        </span>
+      </aside>
+    </div>
   );
 }
